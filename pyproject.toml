@@ -7,7 +7,7 @@ license = "Apache-2.0"
 readme = "README.md"
 homepage = "https://github.com/jdrew82/nautobot-plugin-ssot-unifi"
 repository = "https://github.com/jdrew82/nautobot-plugin-ssot-unifi"
-keywords = ["nautobot", "nautobot-plugin"]
+keywords = ["nautobot", "nautobot-plugin", "nautobot-ssot"]
 classifiers = [
     "Intended Audience :: Developers",
     "Development Status :: 5 - Production/Stable",

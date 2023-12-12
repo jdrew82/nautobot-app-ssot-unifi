@@ -5,6 +5,7 @@ from nautobot.extras.jobs import BooleanVar
 from nautobot_ssot.jobs.base import DataSource, DataTarget
 from nautobot_ssot_unifi.diffsync.adapters.nautobot import UniFiNautobotAdapter
 from nautobot_ssot_unifi.diffsync.adapters.unifi import UniFiAdapter
+from nautobot_ssot_unifi.utils.unifi import connect_controller
 
 
 name = "UniFi SSoT"  # pylint: disable=invalid-name
@@ -35,6 +36,7 @@ class UniFiDataSource(DataSource):
 
     def load_source_adapter(self):
         """Load data from UniFi into DiffSync models."""
+        conn = connect_controller()
         self.source_adapter = UniFiAdapter(job=self, sync=self.sync, client=conn)
         self.source_adapter.load()
 
@@ -83,6 +85,7 @@ class UniFiDataTarget(DataTarget):
 
     def load_target_adapter(self):
         """Load data from UniFi into DiffSync models."""
+        conn = connect_controller()
         self.target_adapter = UniFiAdapter(job=self, sync=self.sync, client=conn)
         self.target_adapter.load()
 

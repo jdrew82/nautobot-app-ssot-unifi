@@ -54,3 +54,8 @@ class TestUniFiAdapterTestCase(TransactionTestCase):
         """Test Nautobot SSoT UniFi load_manufacturer() function."""
         self.unifi.load_manufacturer()
         self.assertEqual({"Ubiquiti"}, {manu.get_unique_id() for manu in self.unifi.get_all("manufacturer")})
+
+    def test_load_devicetype(self):
+        """Test Nautobot SSoT UniFi load_devicetype() function."""
+        self.unifi.load_devicetype(model="Test")
+        self.assertEqual({"Test__Ubiquiti"}, {dt.get_unique_id() for dt in self.unifi.get_all("devicetype")})

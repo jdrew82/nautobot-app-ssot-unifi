@@ -12,6 +12,7 @@ from nautobot_ssot_unifi.diffsync.models.unifi import (
     UniFiDeviceTypeModel,
     UniFiInterfaceModel,
 )
+from nautobot_ssot_unifi.utils.unifi import get_sites
 
 
 class UniFiAdapter(DiffSync):
@@ -43,7 +44,7 @@ class UniFiAdapter(DiffSync):
 
     def load_sites(self):
         """Load Sites from UniFi as Locations."""
-        locations = self.conn._read(url=self.conn.url + "api/self/sites")
+        locations = get_sites(conn=self.conn)
         for site in locations:
             self.site_map[site["_id"]] = site["desc"]
             new_site = self.location(

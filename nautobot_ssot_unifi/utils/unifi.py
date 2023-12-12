@@ -19,3 +19,15 @@ def connect_controller():
         port=PLUGIN_CFG["unifi_port"],
         ssl_verify=PLUGIN_CFG["verify"],
     )
+
+
+def get_sites(conn: Controller) -> dict:
+    """Gather location information from UniFi.
+
+    Args:
+        conn (Controller): Connection to UniFi controller.
+
+    Returns:
+        dict: List of Site locations from UniFi controller.
+    """
+    return conn._read(url=conn.url + "api/self/sites")  # pylint: disable=protected-access

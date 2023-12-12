@@ -55,13 +55,14 @@ class UniFiAdapter(DiffSync):
             self.add(new_site)
 
     def load_manufacturer(self):
-        """Load Manufacturer from UniFi as Manufacturer"""
+        """Load Manufacturer from UniFi as Manufacturer."""
         ubi_vendor = self.manufacturer(
             name="Ubiquiti",
         )
         self.add(ubi_vendor)
 
     def load_devicetype(self, model: str, manu_name: str = "Ubiquiti"):
+        """Load Device models from UniFi as DeviceType."""
         try:
             self.get(self.devicetype, {"model": model, "manufacturer__name": manu_name})
         except ObjectNotFound:

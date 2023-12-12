@@ -1,27 +1,24 @@
 """Nautobot Adapter for Unifi SSoT plugin."""
 
-from diffsync import DiffSync
-from nautobot_ssot_unifi.diffsync.models.nautobot import NautobotDevice
+from nautobot_ssot.contrib import NautobotAdapter
+from nautobot_ssot_unifi.diffsync.models.base import (
+    LocationModel,
+    ManufacturerModel,
+    DeviceTypeModel,
+    RoleModel,
+    DeviceModel,
+    InterfaceModel,
+)
 
 
 class UniFiNautobotAdapter(NautobotAdapter):
     """DiffSync adapter for Nautobot."""
 
-    device = NautobotDevice
+    location = LocationModel
+    manufacturer = ManufacturerModel
+    devicetype = DeviceTypeModel
+    role = RoleModel
+    device = DeviceModel
+    interface = InterfaceModel
 
-    top_level = ["device"]
-
-    def __init__(self, *args, job=None, sync=None, **kwargs):
-        """Initialize Nautobot.
-
-        Args:
-            job (object, optional): Nautobot job. Defaults to None.
-            sync (object, optional): Nautobot DiffSync. Defaults to None.
-        """
-        super().__init__(*args, **kwargs)
-        self.job = job
-        self.sync = sync
-
-    def load(self):
-        """Load data from Nautobot into DiffSync models."""
-        raise NotImplementedError
+    top_level = ["location", "manufacturer", "device", "interface"]

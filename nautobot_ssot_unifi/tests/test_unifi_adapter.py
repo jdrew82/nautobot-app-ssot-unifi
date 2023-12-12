@@ -49,3 +49,8 @@ class TestUniFiAdapterTestCase(TransactionTestCase):
             {"Test__Site"},
             {site.get_unique_id() for site in self.unifi.get_all("location")},
         )
+
+    def test_load_manufacturer(self):
+        """Test Nautobot SSoT UniFi load_manufacturer() function."""
+        self.unifi.load_manufacturer()
+        self.assertEqual({"Ubiquiti"}, {manu.get_unique_id() for manu in self.unifi.get_all("manufacturer")})

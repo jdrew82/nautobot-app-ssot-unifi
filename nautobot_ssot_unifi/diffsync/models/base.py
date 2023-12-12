@@ -1,8 +1,21 @@
 """DiffSyncModel subclasses for Nautobot-to-UniFi data sync."""
 from typing import Optional
 from nautobot_ssot.contrib import NautobotModel
-from nautobot.dcim.models import Device, DeviceType, Interface, Location, Manufacturer
+from nautobot.dcim.models import Device, DeviceType, Interface, Location, LocationType, Manufacturer
 from nautobot.extras.models import Role
+
+
+class LocationTypeModel(NautobotModel):
+    """DiffSync model for UniFi locations."""
+
+    _model = LocationType
+    _modelname = "locationtype"
+    _identifiers = ("name",)
+    _attributes = ("content_types",)
+    _children = {}
+
+    name: str
+    content_types: str
 
 
 class LocationModel(NautobotModel):
@@ -11,12 +24,11 @@ class LocationModel(NautobotModel):
     _model = Location
     _modelname = "location"
     _identifiers = ("name", "location_type__name")
-    _attributes = ("content_types",)
+    _attributes = ()
     _children = {}
 
     name: str
     location_type__name: str
-    content_types: str
 
 
 class ManufacturerModel(NautobotModel):

@@ -5,6 +5,7 @@ from diffsync.exceptions import ObjectNotFound
 from pyunifi.controller import Controller
 from nautobot_ssot_unifi.constants import DEVICETYPE_MAP
 from nautobot_ssot_unifi.diffsync.models.unifi import (
+    UniFiLocationTypeModel,
     UniFiLocationModel,
     UniFiManufacturerModel,
     UniFiRoleModel,
@@ -18,6 +19,7 @@ from nautobot_ssot_unifi.utils.unifi import get_sites
 class UniFiAdapter(DiffSync):
     """DiffSync adapter for UniFi."""
 
+    locationtype = UniFiLocationTypeModel
     location = UniFiLocationModel
     manufacturer = UniFiManufacturerModel
     devicetype = UniFiDeviceTypeModel
@@ -25,7 +27,7 @@ class UniFiAdapter(DiffSync):
     device = UniFiDeviceModel
     interface = UniFiInterfaceModel
 
-    top_level = ["location", "manufacturer", "device", "interface"]
+    top_level = ["locationtype", "location", "manufacturer", "device", "interface"]
 
     def __init__(self, *args, job=None, sync=None, client: Controller, **kwargs):
         """Initialize UniFi Controller.
@@ -44,12 +46,16 @@ class UniFiAdapter(DiffSync):
 
     def load_sites(self):
         """Load Sites from UniFi as Locations."""
+        new_lt = self.locationtype(
+            name="Site",
+            content_types="device",
+        )
+        self.add(new_lt)
         locations = get_sites(conn=self.conn)
         for site in locations:
             self.site_map[site["_id"]] = site["desc"]
             new_site = self.location(
                 name=site["desc"],
-                content_types="device",
                 location_type__name="Site",
             )
             self.add(new_site)

@@ -1,6 +1,7 @@
 """DiffSync models for Nautobot SSoT UniFi."""
 
 from nautobot_ssot_unifi.diffsync.models.base import (
+    LocationTypeModel,
     LocationModel,
     ManufacturerModel,
     RoleModel,
@@ -8,6 +9,23 @@ from nautobot_ssot_unifi.diffsync.models.base import (
     DeviceModel,
     InterfaceModel,
 )
+
+
+class UniFiLocationTypeModel(LocationTypeModel):
+    """UniFi implementation of LocationType DiffSync model."""
+
+    @classmethod
+    def create(cls, diffsync, ids, attrs):
+        """Create LocationType in UniFi from UniFiLocationTypeModel object."""
+        return super().create(diffsync=diffsync, ids=ids, attrs=attrs)
+
+    def update(self, attrs):
+        """Update LocationType in UniFi from UniFiLocationTypeModel object."""
+        return super().update(attrs)
+
+    def delete(self):
+        """Delete LocationType in UniFi from UniFiLocationTypeModel object."""
+        return self
 
 
 class UniFiLocationModel(LocationModel):

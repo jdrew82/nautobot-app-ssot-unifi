@@ -1,7 +1,7 @@
 """Test UniFi adapter."""
 
 import json
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 from nautobot.extras.models import JobResult
 from nautobot.core.testing import TransactionTestCase
@@ -15,7 +15,8 @@ def load_json(path):
         return json.loads(file.read())
 
 
-DEVICE_FIXTURE = load_json("./nautobot_ssot_unifi/tests/fixtures/get_devices.json")
+SITE_FIXTURE = load_json("./nautobot_ssot_unifi/tests/fixtures/get_sites.json")
+AP_FIXTURE = load_json("./nautobot_ssot_unifi/tests/fixtures/get_aps.json")
 
 
 class TestUniFiAdapterTestCase(TransactionTestCase):
@@ -27,7 +28,7 @@ class TestUniFiAdapterTestCase(TransactionTestCase):
     def setUp(self):
         """Initialize test case."""
         self.unifi_client = MagicMock()
-        self.unifi_client.get_devices.return_value = DEVICE_FIXTURE
+        self.unifi_client.get_aps.return_value = AP_FIXTURE
 
         self.job = self.job_class()
         self.job.job_result = JobResult.objects.create(
@@ -35,10 +36,16 @@ class TestUniFiAdapterTestCase(TransactionTestCase):
         )
         self.unifi = UniFiAdapter(job=self.job, sync=None, client=self.unifi_client)
 
-    def test_data_loading(self):
-        """Test Nautobot SSoT UniFi load() function."""
-        # self.unifi.load()
-        # self.assertEqual(
-        #     {dev["name"] for dev in DEVICE_FIXTURE},
-        #     {dev.get_unique_id() for dev in self.unifi.get_all("device")},
-        # )
+    @patch("nautobot_ssot_unifi.diffsync.adapters.unifi.get_sites")
+    def test_load_sites(self, mock_get_sites):
+        """Test Nautobot SSoT UniFi load_sites() function."""
+        mock_get_sites.return_value = SITE_FIXTURE
+        self.unifi.load_sites()
+        self.assertEqual(
+            {"Site"},
+            {site.get_unique_id() for site in self.unifi.get_all("locationtype")},
+        )
+        self.assertEqual(
+            {"Test__Site"},
+            {site.get_unique_id() for site in self.unifi.get_all("location")},
+        )

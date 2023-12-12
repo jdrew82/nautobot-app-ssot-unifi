@@ -1,0 +1,12 @@
+[
+    {
+        "_id": "63b0a5b8539cd042ecba85b5",
+        "anonymous_id": "6f680d3e-3f9b-472f-9fa0-29f28bb6830e",
+        "name": "default",
+        "desc": "Test",
+        "attr_hidden_id": "default",
+        "attr_no_delete": true,
+        "role": "admin",
+        "device_count": 5
+    }
+]

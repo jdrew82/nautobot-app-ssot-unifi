@@ -42,7 +42,7 @@ class UniFiDataSource(DataSource):
 
     def load_target_adapter(self):
         """Load data from Nautobot into DiffSync models."""
-        self.target_adapter = UnifiNautobotAdapter(job=self, sync=self.sync)
+        self.target_adapter = UniFiNautobotAdapter(job=self, sync=self.sync)
         self.target_adapter.load()
 
     def run(  # pylint: disable=arguments-differ, too-many-arguments

@@ -140,8 +140,12 @@ PLUGINS_CONFIG = {
     "nautobot_ssot": {
         "hide_example_jobs": True,
     },
-    # 'nautobot_ssot_unifi': {
-    #     'foo': 'bar',
-    #     'buzz': 'bazz',
-    # },
+    "nautobot_ssot_unifi": {
+        "unifi_host": os.getenv("UNIFI_HOST", ""),
+        "unifi_user": os.getenv("UNIFI_USER", ""),
+        "unifi_password": os.getenv("UNIFI_PASSWORD", ""),
+        "unifi_port": os.getenv("UNIFI_PORT", 8443),
+        "verify": is_truthy(os.getenv("UNIFI_VERIFY", False)),
+        "import_clients": is_truthy(os.getenv("UNIFI_IMPORT_CLIENTS", False)),
+    },
 }

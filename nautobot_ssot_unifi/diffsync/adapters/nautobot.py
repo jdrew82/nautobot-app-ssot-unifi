@@ -4,7 +4,7 @@ from diffsync import DiffSync
 from nautobot_ssot_unifi.diffsync.models.nautobot import NautobotDevice
 
 
-class NautobotAdapter(DiffSync):
+class UniFiNautobotAdapter(NautobotAdapter):
     """DiffSync adapter for Nautobot."""
 
     device = NautobotDevice

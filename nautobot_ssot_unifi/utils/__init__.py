@@ -1,1 +1,1 @@
-"""Utility functions for working with Unifi and Nautobot."""
+"""Utility functions for working with UniFi and Nautobot."""

@@ -1,10 +1,4 @@
-"""Nautobot SSoT Unifi DiffSync models for Nautobot SSoT Unifi SSoT."""
-
-from nautobot_ssot_unifi.diffsync.models.base import Device
-
-
-class UnifiDevice(Device):
-    """Unifi implementation of Device DiffSync model."""
+"""DiffSync models for Nautobot SSoT UniFi."""
 
     @classmethod
     def create(cls, diffsync, ids, attrs):

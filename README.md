@@ -1,4 +1,4 @@
-# Nautobot SSoT Unifi SSoT
+# Nautobot SSoT UniFi SSoT
 
 A plugin for [Nautobot](https://github.com/nautobot/nautobot).
 

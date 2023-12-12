@@ -2,7 +2,7 @@
 dev_addr: "127.0.0.1:8001"
 edit_uri: "edit/main/nautobot-plugin-ssot-unifi/docs"
 site_dir: "nautobot_ssot_unifi/static/nautobot_ssot_unifi/docs"
-site_name: "Nautobot SSoT Unifi Documentation"
+site_name: "Nautobot SSoT UniFi Documentation"
 site_url: "https://docs.nautobot.com/projects/nautobot-ssot-unifi/en/latest/"
 repo_url: "https://github.com/jdrew82/nautobot-plugin-ssot-unifi"
 copyright: "Copyright &copy; The Authors"

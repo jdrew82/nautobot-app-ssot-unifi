@@ -1,26 +1,27 @@
-"""Jobs for Unifi SSoT integration."""
+"""Jobs for UniFi SSoT integration."""
 
 from nautobot.core.celery import register_jobs
 from nautobot.extras.jobs import BooleanVar
 from nautobot_ssot.jobs.base import DataSource, DataTarget
-from nautobot_ssot_unifi.diffsync.adapters import unifi, nautobot
+from nautobot_ssot_unifi.diffsync.adapters.nautobot import UniFiNautobotAdapter
+from nautobot_ssot_unifi.diffsync.adapters.unifi import UniFiAdapter
 
 
-name = "Unifi SSoT"  # pylint: disable=invalid-name
+name = "UniFi SSoT"  # pylint: disable=invalid-name
 
 
-class UnifiDataSource(DataSource):
-    """Unifi SSoT Data Source."""
+class UniFiDataSource(DataSource):
+    """UniFi SSoT Data Source."""
 
     debug = BooleanVar(description="Enable for more verbose debug logging", default=False)
 
     class Meta:  # pylint: disable=too-few-public-methods
-        """Meta data for Unifi."""
+        """Meta data for UniFi."""
 
-        name = "Unifi to Nautobot"
-        data_source = "Unifi"
+        name = "UniFi to Nautobot"
+        data_source = "UniFi"
         data_target = "Nautobot"
-        description = "Sync information from Unifi to Nautobot"
+        description = "Sync information from UniFi to Nautobot"
 
     @classmethod
     def config_information(cls):
@@ -33,13 +34,13 @@ class UnifiDataSource(DataSource):
         return ()
 
     def load_source_adapter(self):
-        """Load data from Unifi into DiffSync models."""
-        self.source_adapter = unifi.UnifiAdapter(job=self, sync=self.sync)
+        """Load data from UniFi into DiffSync models."""
+        self.source_adapter = UniFiAdapter(job=self, sync=self.sync, client=conn)
         self.source_adapter.load()
 
     def load_target_adapter(self):
         """Load data from Nautobot into DiffSync models."""
-        self.target_adapter = nautobot.NautobotAdapter(job=self, sync=self.sync)
+        self.target_adapter = UnifiNautobotAdapter(job=self, sync=self.sync)
         self.target_adapter.load()
 
     def run(  # pylint: disable=arguments-differ, too-many-arguments
@@ -52,18 +53,18 @@ class UnifiDataSource(DataSource):
         super().run(dryrun=self.dryrun, memory_profiling=self.memory_profiling, *args, **kwargs)
 
 
-class UnifiDataTarget(DataTarget):
-    """Unifi SSoT Data Target."""
+class UniFiDataTarget(DataTarget):
+    """UniFi SSoT Data Target."""
 
     debug = BooleanVar(description="Enable for more verbose debug logging", default=False)
 
     class Meta:  # pylint: disable=too-few-public-methods
-        """Meta data for Unifi."""
+        """Meta data for UniFi."""
 
-        name = "Nautobot to Unifi"
+        name = "Nautobot to UniFi"
         data_source = "Nautobot"
-        data_target = "Unifi"
-        description = "Sync information from Nautobot to Unifi"
+        data_target = "UniFi"
+        description = "Sync information from Nautobot to UniFi"
 
     @classmethod
     def config_information(cls):
@@ -77,12 +78,12 @@ class UnifiDataTarget(DataTarget):
 
     def load_source_adapter(self):
         """Load data from Nautobot into DiffSync models."""
-        self.source_adapter = nautobot.NautobotAdapter(job=self, sync=self.sync)
+        self.source_adapter = UniFiNautobotAdapter(job=self, sync=self.sync)
         self.source_adapter.load()
 
     def load_target_adapter(self):
-        """Load data from Unifi into DiffSync models."""
-        self.target_adapter = unifi.UnifiAdapter(job=self, sync=self.sync)
+        """Load data from UniFi into DiffSync models."""
+        self.target_adapter = UniFiAdapter(job=self, sync=self.sync, client=conn)
         self.target_adapter.load()
 
     def run(  # pylint: disable=arguments-differ, too-many-arguments
@@ -95,5 +96,5 @@ class UnifiDataTarget(DataTarget):
         super().run(dryrun=self.dryrun, memory_profiling=self.memory_profiling, *args, **kwargs)
 
 
-jobs = [UnifiDataSource, UnifiDataTarget]
+jobs = [UniFiDataSource, UniFiDataTarget]
 register_jobs(*jobs)

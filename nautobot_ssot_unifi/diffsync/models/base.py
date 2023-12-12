@@ -1,4 +1,4 @@
-"""DiffSyncModel subclasses for Nautobot-to-Unifi data sync."""
+"""DiffSyncModel subclasses for Nautobot-to-UniFi data sync."""
 from typing import Optional
 from uuid import UUID
 from diffsync import DiffSyncModel

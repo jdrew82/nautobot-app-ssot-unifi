@@ -29,7 +29,7 @@ The plugin is available as a Python package via PyPI and can be installed with `
 pip install nautobot-ssot-unifi
 ```
 
-To ensure Nautobot SSoT Unifi is automatically re-installed during future upgrades, create a file named `local_requirements.txt` (if not already existing) in the Nautobot root directory (alongside `requirements.txt`) and list the `nautobot-ssot-unifi` package:
+To ensure Nautobot SSoT UniFi is automatically re-installed during future upgrades, create a file named `local_requirements.txt` (if not already existing) in the Nautobot root directory (alongside `requirements.txt`) and list the `nautobot-ssot-unifi` package:
 
 ```shell
 echo nautobot-ssot-unifi >> local_requirements.txt

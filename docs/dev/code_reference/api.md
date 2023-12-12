@@ -1,4 +1,4 @@
-# Nautobot SSoT Unifi API Package
+# Nautobot SSoT UniFi API Package
 
 ::: nautobot_ssot_unifi.api
     options:

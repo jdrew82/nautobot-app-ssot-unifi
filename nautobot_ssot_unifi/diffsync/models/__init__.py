@@ -1,1 +1,1 @@
-"""DiffSync models and adapters for the Unifi SSoT plugin."""
+"""DiffSync models and adapters for the UniFi SSoT plugin."""

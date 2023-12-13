@@ -48,7 +48,7 @@ class UniFiAdapter(DiffSync):
         """Load Sites from UniFi as Locations."""
         new_lt = self.locationtype(
             name="Site",
-            content_types="device",
+            content_types=[{"app_label": "dcim", "model": "device"}],
         )
         self.add(new_lt)
         locations = get_sites(conn=self.conn)
@@ -57,6 +57,7 @@ class UniFiAdapter(DiffSync):
             new_site = self.location(
                 name=site["desc"],
                 location_type__name="Site",
+                status__name="Active",
             )
             self.add(new_site)
 
@@ -93,8 +94,9 @@ class UniFiAdapter(DiffSync):
                     location__name=location,
                     serial=ap["serial"],
                     role__name="Unknown",
-                    devicetype__model=model,
-                    devicetype__manufacturer__name="Ubiquiti",
+                    device_type__model=model,
+                    device_type__manufacturer__name="Ubiquiti",
+                    status__name="Active",
                 )
                 self.add(new_dev)
             try:
@@ -112,6 +114,9 @@ class UniFiAdapter(DiffSync):
         for client in clients:
             if client.get("hostname") and client["hostname"] != "\x03":
                 site = self.site_map[client["site_id"]] if client.get("site_id") else "Unknown"
+                manu_name = client["oui"] if client.get("oui") else "Unknown"
+                self.load_manufacturer(manu_name=manu_name)
+                self.load_devicetype(model="Unknown Device", manu_name=manu_name)
                 try:
                     _ = self.get(self.device, client["hostname"])
                     self.job.logger.warning(f"Duplicate client found: {client['hostname']}.")
@@ -119,10 +124,11 @@ class UniFiAdapter(DiffSync):
                     new_dev = self.device(
                         name=client["hostname"],
                         location__name=site,
-                        serial=None,
+                        serial="",
                         role__name="Client",
-                        devicetype__model="Unknown Device",
-                        devicetype__manufacturer__name=client["oui"] if client.get("oui") else "Unknown",
+                        device_type__model="Unknown Device",
+                        device_type__manufacturer__name=manu_name,
+                        status__name="Active",
                     )
                     self.add(new_dev)
                 try:
@@ -130,7 +136,7 @@ class UniFiAdapter(DiffSync):
                 except ObjectNotFound:
                     new_role = self.role(
                         name="Client",
-                        content_types="device",
+                        content_types=[{"app_label": "dcim", "model": "device"}],
                     )
                     self.add(new_role)
 

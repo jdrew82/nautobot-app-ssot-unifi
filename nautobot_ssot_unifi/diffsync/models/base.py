@@ -1,8 +1,17 @@
 """DiffSyncModel subclasses for Nautobot-to-UniFi data sync."""
+from typing import Optional, List
+from typing_extensions import TypedDict
 from typing import Optional
 from nautobot_ssot.contrib import NautobotModel
 from nautobot.dcim.models import Device, DeviceType, Interface, Location, LocationType, Manufacturer
 from nautobot.extras.models import Role
+
+
+class ContentTypeDict(TypedDict):
+    """Many-to-many relationship typed dict explaining which fields are interesting."""
+
+    app_label: str
+    model: str
 
 
 class LocationTypeModel(NautobotModel):
@@ -15,7 +24,7 @@ class LocationTypeModel(NautobotModel):
     _children = {}
 
     name: str
-    content_types: str
+    content_types: List[ContentTypeDict] = []
 
 
 class LocationModel(NautobotModel):
@@ -66,7 +75,7 @@ class RoleModel(NautobotModel):
     _children = {}
 
     name: str
-    content_types: str
+    content_types: List[ContentTypeDict] = []
 
 
 class DeviceModel(NautobotModel):

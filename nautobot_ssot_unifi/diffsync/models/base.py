@@ -33,11 +33,12 @@ class LocationModel(NautobotModel):
     _model = Location
     _modelname = "location"
     _identifiers = ("name", "location_type__name")
-    _attributes = ()
+    _attributes = ("status__name",)
     _children = {}
 
     name: str
     location_type__name: str
+    status__name: str
 
 
 class ManufacturerModel(NautobotModel):
@@ -88,8 +89,7 @@ class DeviceModel(NautobotModel):
         "location__name",
         "serial",
         "role__name",
-        "devicetype__model",
-        "devicetype__manufacturer__name",
+        "status__name",
     )
     _children = {}
 
@@ -97,8 +97,7 @@ class DeviceModel(NautobotModel):
     location__name: str
     serial: Optional[str]
     role__name: Optional[str]
-    devicetype__model: Optional[str]
-    devicetype__manufacturer__name: Optional[str]
+    status__name: str
 
 
 class InterfaceModel(NautobotModel):

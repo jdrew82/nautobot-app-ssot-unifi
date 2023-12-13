@@ -61,12 +61,9 @@ class UniFiAdapter(DiffSync):
             )
             self.add(new_site)
 
-    def load_manufacturer(self):
+    def load_manufacturer(self, manu_name: str = "Ubiquiti"):
         """Load Manufacturer from UniFi as Manufacturer."""
-        ubi_vendor = self.manufacturer(
-            name="Ubiquiti",
-        )
-        self.add(ubi_vendor)
+        self.get_or_instantiate(self.manufacturer, ids={"name": manu_name})
 
     def load_devicetype(self, model: str, manu_name: str = "Ubiquiti"):
         """Load Device models from UniFi as DeviceType."""
@@ -85,6 +82,7 @@ class UniFiAdapter(DiffSync):
         for ap in aps:
             model = DEVICETYPE_MAP[ap["model"]] if DEVICETYPE_MAP.get(ap["model"]) else ap["model"]
             location = self.site_map[ap["site_id"]] if ap.get("site_id") else "Unknown"
+            self.load_manufacturer()
             self.load_devicetype(model)
             try:
                 self.get(self.device, ap["name"])
@@ -104,7 +102,7 @@ class UniFiAdapter(DiffSync):
             except ObjectNotFound:
                 new_role = self.role(
                     name="Unknown",
-                    content_types="device",
+                    content_types=[{"app_label": "dcim", "model": "device"}],
                 )
                 self.add(new_role)
 
@@ -143,6 +141,5 @@ class UniFiAdapter(DiffSync):
     def load(self):
         """Load data from UniFi into DiffSync models."""
         self.load_sites()
-        self.load_manufacturer()
         self.load_unifi_devices()
         self.load_clients()

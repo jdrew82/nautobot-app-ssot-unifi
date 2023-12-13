@@ -23,4 +23,4 @@ class UniFiNautobotAdapter(NautobotAdapter):
     device = DeviceModel
     interface = InterfaceModel
 
-    top_level = ["locationtype", "location", "manufacturer", "device", "interface"]
+    top_level = ["locationtype", "location", "manufacturer", "devicetype", "role", "device", "interface"]

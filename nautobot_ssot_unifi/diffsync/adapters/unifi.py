@@ -27,7 +27,7 @@ class UniFiAdapter(DiffSync):
     device = UniFiDeviceModel
     interface = UniFiInterfaceModel
 
-    top_level = ["locationtype", "location", "manufacturer", "device", "interface"]
+    top_level = ["locationtype", "location", "manufacturer", "devicetype", "role", "device", "interface"]
 
     def __init__(self, *args, job=None, sync=None, client: Controller, **kwargs):
         """Initialize UniFi Controller.

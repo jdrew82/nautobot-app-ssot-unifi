@@ -1,7 +1,7 @@
 """DiffSyncModel subclasses for Nautobot-to-UniFi data sync."""
 from typing import Optional, List
 from typing_extensions import TypedDict
-from typing import Optional
+from diffsync.enum import DiffSyncModelFlags
 from nautobot_ssot.contrib import NautobotModel
 from nautobot.dcim.models import Device, DeviceType, Interface, Location, LocationType, Manufacturer
 from nautobot.extras.models import Role
@@ -68,6 +68,8 @@ class DeviceTypeModel(NautobotModel):
 
 class RoleModel(NautobotModel):
     """DiffSync model for UniFi device roles."""
+
+    model_flags = DiffSyncModelFlags.SKIP_UNMATCHED_DST
 
     _model = Role
     _modelname = "role"

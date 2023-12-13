@@ -56,6 +56,7 @@ mkdocs-version-annotations = "1.0.0"
 # Automatic documentation from sources, for MkDocs
 mkdocstrings = "0.22.0"
 mkdocstrings-python = "1.5.2"
+python-semantic-release = "7.24.0"
 
 [tool.black]
 line-length = 120
@@ -123,3 +124,14 @@ add_ignore = "D212"
 [build-system]
 requires = ["poetry_core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.semantic_release]
+version_toml = [
+    "pyproject.toml:tool.poetry.version"
+]
+major_on_zero = false
+branch = "main"
+upload_to_PyPI = true
+upload_to_release = true
+changelog_file = "CHANGELOG.md"
+build_command = "poetry build"

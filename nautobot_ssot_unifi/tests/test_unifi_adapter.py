@@ -59,3 +59,11 @@ class TestUniFiAdapterTestCase(TransactionTestCase):
         """Test Nautobot SSoT UniFi load_devicetype() function."""
         self.unifi.load_devicetype(model="Test")
         self.assertEqual({"Test__Ubiquiti"}, {dt.get_unique_id() for dt in self.unifi.get_all("devicetype")})
+
+    def test_load_unifi_devices(self):
+        """Test Nautobot SSoT UniFi load_unifi_devices() function."""
+        self.unifi.site_map["63b0a5b8539cd042ecba85b5"] = "Test"
+        self.unifi.load_unifi_devices()
+        self.assertEqual(
+            {dev["name"] for dev in AP_FIXTURE}, {dev.get_unique_id() for dev in self.unifi.get_all("device")}
+        )

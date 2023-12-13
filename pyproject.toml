@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nautobot-ssot-unifi"
-version = "0.2.0"
+version = "1.0.0"
 description = "Nautobot SSoT App for UniFi"
 authors = ["Justin Drew <2396364+jdrew82@users.noreply.github.com>"]
 license = "Apache-2.0"

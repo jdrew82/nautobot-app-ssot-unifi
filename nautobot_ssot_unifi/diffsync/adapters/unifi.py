@@ -1,7 +1,6 @@
 """Nautobot Adapter for UniFi SSoT plugin."""
 
 from diffsync import DiffSync
-from diffsync.exceptions import ObjectNotFound
 from pyunifi.controller import Controller
 from nautobot_ssot_unifi.constants import DEVICETYPE_MAP
 from nautobot_ssot_unifi.diffsync.models.unifi import (
@@ -46,20 +45,17 @@ class UniFiAdapter(DiffSync):
 
     def load_sites(self):
         """Load Sites from UniFi as Locations."""
-        new_lt = self.locationtype(
-            name="Site",
-            content_types=[{"app_label": "dcim", "model": "device"}],
+        self.get_or_instantiate(
+            self.locationtype, ids={"name": "Site", "content_types": [{"app_label": "dcim", "model": "device"}]}
         )
-        self.add(new_lt)
         locations = get_sites(conn=self.conn)
         for site in locations:
             self.site_map[site["_id"]] = site["desc"]
-            new_site = self.location(
-                name=site["desc"],
-                location_type__name="Site",
-                status__name="Active",
+            self.get_or_instantiate(
+                self.location,
+                ids={"name": site["desc"], "location_type__name": "Site"},
+                attrs={"status__name": "Active"},
             )
-            self.add(new_site)
 
     def load_manufacturer(self, manu_name: str = "Ubiquiti"):
         """Load Manufacturer from UniFi as Manufacturer."""
@@ -67,14 +63,7 @@ class UniFiAdapter(DiffSync):
 
     def load_devicetype(self, model: str, manu_name: str = "Ubiquiti"):
         """Load Device models from UniFi as DeviceType."""
-        try:
-            self.get(self.devicetype, {"model": model, "manufacturer__name": manu_name})
-        except ObjectNotFound:
-            new_dt = self.devicetype(
-                model=model,
-                manufacturer__name=manu_name,
-            )
-            self.add(new_dt)
+        self.get_or_instantiate(self.devicetype, {"model": model, "manufacturer__name": manu_name})
 
     def load_unifi_devices(self):
         """Load Devices from UniFi as Devices."""
@@ -84,27 +73,21 @@ class UniFiAdapter(DiffSync):
             location = self.site_map[ap["site_id"]] if ap.get("site_id") else "Unknown"
             self.load_manufacturer()
             self.load_devicetype(model)
-            try:
-                self.get(self.device, ap["name"])
-            except ObjectNotFound:
-                new_dev = self.device(
-                    name=ap["name"],
-                    location__name=location,
-                    serial=ap["serial"],
-                    role__name="Unknown",
-                    device_type__model=model,
-                    device_type__manufacturer__name="Ubiquiti",
-                    status__name="Active",
-                )
-                self.add(new_dev)
-            try:
-                self.get(self.role, "Unknown")
-            except ObjectNotFound:
-                new_role = self.role(
-                    name="Unknown",
-                    content_types=[{"app_label": "dcim", "model": "device"}],
-                )
-                self.add(new_role)
+            self.get_or_instantiate(
+                self.device,
+                ids={"name": ap["name"]},
+                attrs={
+                    "location__name": location,
+                    "serial": ap["serial"],
+                    "role__name": "Unknown",
+                    "device_type__model": model,
+                    "device_type__manufacturer__name": "Ubiquiti",
+                    "status__name": "Active",
+                },
+            )
+            self.get_or_instantiate(
+                self.role, ids={"name": "Unknown"}, attrs={"content_types": [{"app_label": "dcim", "model": "device"}]}
+            )
 
     def load_clients(self):
         """Load client devices from UniFi as Devices."""
@@ -115,28 +98,23 @@ class UniFiAdapter(DiffSync):
                 manu_name = client["oui"] if client.get("oui") else "Unknown"
                 self.load_manufacturer(manu_name=manu_name)
                 self.load_devicetype(model="Unknown Device", manu_name=manu_name)
-                try:
-                    _ = self.get(self.device, client["hostname"])
-                    self.job.logger.warning(f"Duplicate client found: {client['hostname']}.")
-                except ObjectNotFound:
-                    new_dev = self.device(
-                        name=client["hostname"],
-                        location__name=site,
-                        serial="",
-                        role__name="Client",
-                        device_type__model="Unknown Device",
-                        device_type__manufacturer__name=manu_name,
-                        status__name="Active",
-                    )
-                    self.add(new_dev)
-                try:
-                    self.get(self.role, "Client")
-                except ObjectNotFound:
-                    new_role = self.role(
-                        name="Client",
-                        content_types=[{"app_label": "dcim", "model": "device"}],
-                    )
-                    self.add(new_role)
+                self.get_or_instantiate(
+                    self.device,
+                    ids={"name": client["hostname"]},
+                    attrs={
+                        "location__name": site,
+                        "serial": "",
+                        "role__name": "Client",
+                        "device_type__model": "Unknown Device",
+                        "device_type__manufacturer__name": manu_name,
+                        "status__name": "Active",
+                    },
+                )
+                self.get_or_instantiate(
+                    self.role,
+                    ids={"name": "Client"},
+                    attrs={"content_types": [{"app_label": "dcim", "model": "device"}]},
+                )
 
     def load(self):
         """Load data from UniFi into DiffSync models."""

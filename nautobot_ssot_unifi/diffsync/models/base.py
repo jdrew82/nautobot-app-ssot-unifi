@@ -89,6 +89,8 @@ class DeviceModel(NautobotModel):
         "location__name",
         "serial",
         "role__name",
+        "device_type__model",
+        "device_type__manufacturer__name",
         "status__name",
     )
     _children = {}
@@ -97,6 +99,8 @@ class DeviceModel(NautobotModel):
     location__name: str
     serial: Optional[str]
     role__name: Optional[str]
+    device_type__model: Optional[str]
+    device_type__manufacturer__name: Optional[str]
     status__name: str
 
 

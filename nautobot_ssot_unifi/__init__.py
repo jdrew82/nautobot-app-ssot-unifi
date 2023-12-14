@@ -4,7 +4,9 @@ from importlib import metadata
 
 __version__ = metadata.version(__name__)
 
+from nautobot.core.signals import nautobot_database_ready
 from nautobot.extras.plugins import NautobotAppConfig
+from nautobot_ssot_unifi.signals import nautobot_database_ready_callback
 
 
 class NautobotSsotUniFiConfig(NautobotAppConfig):
@@ -21,6 +23,12 @@ class NautobotSsotUniFiConfig(NautobotAppConfig):
     max_version = "2.9999"
     default_settings = {}
     caching_config = {}
+
+    def ready(self):
+        """Trigger callback when database is ready."""
+        super().ready()
+
+        nautobot_database_ready.connect(nautobot_database_ready_callback, sender=self)
 
 
 config = NautobotSsotUniFiConfig  # pylint:disable=invalid-name

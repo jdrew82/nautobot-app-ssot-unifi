@@ -16,18 +16,16 @@ def nautobot_database_ready_callback(sender, *, apps, **kwargs):  # pylint: disa
 
     sor_cf_dict = {
         "type": CustomFieldTypeChoices.TYPE_TEXT,
-        "name": "system_of_record",
-        "slug": "system_of_record",
+        "key": "system_of_record",
         "label": "System of Record",
     }
-    sor_custom_field, _ = CustomField.objects.update_or_create(name=sor_cf_dict["name"], defaults=sor_cf_dict)
+    sor_custom_field, _ = CustomField.objects.update_or_create(key=sor_cf_dict["key"], defaults=sor_cf_dict)
     sync_cf_dict = {
         "type": CustomFieldTypeChoices.TYPE_DATE,
-        "name": "ssot_last_synchronized",
-        "slug": "ssot_last_synchronized",
+        "key": "ssot_last_synchronized",
         "label": "Last sync from System of Record",
     }
-    sync_custom_field, _ = CustomField.objects.update_or_create(name=sync_cf_dict["name"], defaults=sync_cf_dict)
+    sync_custom_field, _ = CustomField.objects.update_or_create(key=sync_cf_dict["key"], defaults=sync_cf_dict)
     for model in [Device, Interface, IPAddress]:
         sor_custom_field.content_types.add(ContentType.objects.get_for_model(model))
         sync_custom_field.content_types.add(ContentType.objects.get_for_model(model))

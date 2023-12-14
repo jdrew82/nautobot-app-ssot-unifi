@@ -1,7 +1,7 @@
 """DiffSyncModel subclasses for Nautobot-to-UniFi data sync."""
 try:
     from typing import Annotated  # Python>=3.9
-except ModuleNotFoundError:
+except ImportError:
     from typing_extensions import Annotated  # Python<3.9
 from typing import Optional, List
 from typing_extensions import TypedDict

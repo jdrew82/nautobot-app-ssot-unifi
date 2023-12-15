@@ -1,5 +1,5 @@
 """Nautobot Adapter for UniFi SSoT plugin."""
-
+from datetime import datetime
 from diffsync import DiffSync
 from pyunifi.controller import Controller
 from nautobot_ssot_unifi.constants import DEVICETYPE_MAP
@@ -83,6 +83,8 @@ class UniFiAdapter(DiffSync):
                     "device_type__model": model,
                     "device_type__manufacturer__name": "Ubiquiti",
                     "status__name": "Active",
+                    "system_of_record": "UniFi SSoT",
+                    "ssot_last_synchronized": datetime.today().date().isoformat(),
                 },
             )
             self.get_or_instantiate(
@@ -108,6 +110,8 @@ class UniFiAdapter(DiffSync):
                         "device_type__model": "Unknown Device",
                         "device_type__manufacturer__name": manu_name,
                         "status__name": "Active",
+                        "system_of_record": "UniFi SSoT",
+                        "ssot_last_synchronized": datetime.today().date().isoformat(),
                     },
                 )
                 self.get_or_instantiate(

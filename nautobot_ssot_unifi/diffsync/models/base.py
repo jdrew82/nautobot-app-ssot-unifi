@@ -1,8 +1,12 @@
 """DiffSyncModel subclasses for Nautobot-to-UniFi data sync."""
+try:
+    from typing import Annotated  # Python>=3.9
+except ImportError:
+    from typing_extensions import Annotated  # Python<3.9
 from typing import Optional, List
 from typing_extensions import TypedDict
 from diffsync.enum import DiffSyncModelFlags
-from nautobot_ssot.contrib import NautobotModel
+from nautobot_ssot.contrib import NautobotModel, CustomFieldAnnotation
 from nautobot.dcim.models import Device, DeviceType, Interface, Location, LocationType, Manufacturer
 from nautobot.extras.models import Role
 
@@ -94,6 +98,8 @@ class DeviceModel(NautobotModel):
         "device_type__model",
         "device_type__manufacturer__name",
         "status__name",
+        "system_of_record",
+        "ssot_last_synchronized",
     )
     _children = {}
 
@@ -104,6 +110,9 @@ class DeviceModel(NautobotModel):
     device_type__model: Optional[str]
     device_type__manufacturer__name: Optional[str]
     status__name: str
+
+    system_of_record: Annotated[str, CustomFieldAnnotation(name="system_of_record")]
+    ssot_last_synchronized: Annotated[str, CustomFieldAnnotation(name="ssot_last_synchronized")]
 
 
 class InterfaceModel(NautobotModel):

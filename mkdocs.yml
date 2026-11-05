@@ -1,10 +1,10 @@
 ---
 dev_addr: "127.0.0.1:8001"
-edit_uri: "edit/main/nautobot-plugin-ssot-unifi/docs"
+edit_uri: "edit/main/docs"
 site_dir: "nautobot_ssot_unifi/static/nautobot_ssot_unifi/docs"
 site_name: "Nautobot SSoT UniFi Documentation"
 site_url: "https://docs.nautobot.com/projects/nautobot-ssot-unifi/en/latest/"
-repo_url: "https://github.com/jdrew82/nautobot-plugin-ssot-unifi"
+repo_url: "https://github.com/jdrew82/nautobot-app-ssot-unifi"
 copyright: "Copyright &copy; The Authors"
 theme:
   name: "material"
@@ -46,12 +46,6 @@ theme:
 extra_css:
   - "assets/extra.css"
 
-# needed for RTD version flyout menu
-# jquery is not (yet) injected by RTD automatically and it might be dropped
-# as a dependency in the future
-extra_javascript:
-  - "https://code.jquery.com/jquery-3.6.0.min.js"
-
 extra:
   generator: false
   ntc_sponsor: true
@@ -72,20 +66,28 @@ extra:
       link: "https://twitter.com/networktocode"
       name: "Network to Code Twitter"
 markdown_extensions:
+  - "markdown_version_annotations":
+      admonition_tag: "???"
   - "admonition"
   - "toc":
       permalink: true
   - "attr_list"
   - "md_in_html"
+  - "pymdownx.details"
   - "pymdownx.highlight":
       anchor_linenums: true
   - "pymdownx.inlinehilite"
   - "pymdownx.snippets"
-  - "pymdownx.superfences"
+  - "pymdownx.superfences":
+      custom_fences:
+        - name: "mermaid"
+          class: "mermaid"
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - "footnotes"
+  - "meta"
 plugins:
   - "search"
-  - "mkdocs-version-annotations"
+  - "glightbox"
   - "mkdocstrings":
       default_handler: "python"
       handlers:
@@ -95,6 +97,12 @@ plugins:
             show_root_heading: true
 watch:
   - "README.md"
+
+validation:
+  omitted_files: "warn"
+  absolute_links: "warn"
+  unrecognized_links: "warn"
+  anchors: "warn"
 
 nav:
   - Overview: "index.md"
@@ -116,6 +124,7 @@ nav:
       - Extending the App: "dev/extending.md"
       - Contributing to the App: "dev/contributing.md"
       - Development Environment: "dev/dev_environment.md"
+      - Release Checklist: "dev/release_checklist.md"
       - Architecture Decision Records: "dev/arch_decision.md"
       - Code Reference:
           - "dev/code_reference/index.md"

@@ -1,0 +1,1 @@
+Rebaked the app from cookiecutter-nautobot-app `nautobot-app-v3.1.4`, replacing black, flake8, and bandit with ruff.

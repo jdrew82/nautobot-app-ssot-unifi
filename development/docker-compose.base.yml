@@ -13,7 +13,6 @@ x-nautobot-base: &nautobot-base
     - "creds.env"
   tty: true
 
-version: "3.8"
 services:
   nautobot:
     depends_on:
@@ -42,8 +41,8 @@ services:
   beat:
     entrypoint:
       - "sh"
-      - "-c"  # this is to evaluate the $NAUTOBOT_LOG_LEVEL from the env
-      - "nautobot-server celery beat -l $$NAUTOBOT_LOG_LEVEL"  ## $$ because of docker-compose
+      - "-c"  # this is to evaluate the $NAUTOBOT_BEAT_LOG_LEVEL from the env
+      - "nautobot-server celery beat -l $$NAUTOBOT_BEAT_LOG_LEVEL"  ## $$ because of docker-compose
     depends_on:
       nautobot:
         condition: "service_healthy"

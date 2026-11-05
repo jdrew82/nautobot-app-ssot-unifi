@@ -1,0 +1,2 @@
+Migrated to the DiffSync 2.0 Adapter API and Pydantic v2 model definitions.
+Simplified the Job `run()` overrides to pass all variables through to the SSoT base job.

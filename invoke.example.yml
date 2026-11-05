@@ -1,12 +1,16 @@
 ---
 nautobot_ssot_unifi:
-  project_name: "nautobot-ssot-unifi"
-  nautobot_ver: "2.0.0"
-  local: false
-  python_ver: "3.11"
-  compose_dir: "development"
-  compose_files:
-    - "docker-compose.base.yml"
-    - "docker-compose.redis.yml"
-    - "docker-compose.postgres.yml"
-    - "docker-compose.dev.yml"
+  nautobot_ver: "3.1.0"
+  python_ver: "3.12"
+  # local: false
+  # ephemeral_ports: false
+  # compose_dir: "/full/path/to/nautobot-app-ssot-unifi/development"
+
+# The following is an example of using MySQL as the database backend
+# ---
+# nautobot_ssot_unifi:
+#   compose_files:
+#     - "docker-compose.base.yml"
+#     - "docker-compose.redis.yml"
+#     - "docker-compose.mysql.yml"
+#     - "docker-compose.dev.yml"
